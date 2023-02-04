@@ -48,6 +48,8 @@ CONSTANT = "constant";
 % check the data type of each table column
 % (Note that *tableColumnClasses* is a user-defined function.)
 classes = tableColumnClasses(T, nColumns);
+% backup the classes
+classesBefore = classes;
 % make a table of data types to class
 columnNames2Classes = table(columnNames, classes)
 
@@ -86,9 +88,9 @@ end % next iCat
 % Let's view the data types again.  They should all be "double".
 
 % check the data type of each table column
-classes = tableColumnClasses(T, nColumns);
+classesAfter = tableColumnClasses(T, nColumns);
 % make a table of data types to class
-columnNames2Classes = table(columnNames, classes)
+columnNames2Classes = table(columnNames, classesBefore, classesAfter)
 
 %%
 % 1. Fill in missing values.  We will be using means for simplity.
@@ -103,6 +105,8 @@ Tarr = table2array(T);
 nMissingPerColumn = sum(isnan(Tarr))';
 % display as a table
 columnNames2nMissing = table(columnNames, nMissingPerColumn)
+% backup the classes
+nMissingPerColumnBefore = nMissingPerColumn;
 
 %%
 % We see that the number of bedrooms is missing 207 entries.
@@ -116,9 +120,9 @@ Tarr = fillmissing(Tarr, 'constant', Tmeans);
 % There should now be no missing data.
 
 % check for any missing values
-nMissingPerColumn = sum(isnan(Tarr))';
+nMissingPerColumnAfter = sum(isnan(Tarr))';
 % display as a table
-columnNames2nMissing = table(columnNames, nMissingPerColumn)
+columnNames2nMissing = table(columnNames, nMissingPerColumnBefore, nMissingPerColumnAfter)
 
 %% Appendix
 
