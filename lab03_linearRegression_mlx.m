@@ -31,6 +31,12 @@ disp(columnNames)
 % New data may include categorical features and missing values. 
 % Because of this, we need to clean up the data.
 
+% store string constants in variables to force syntax errors
+% if misspelled
+DOUBLE = "double";
+OMITNAN = "omitnan";
+CONSTANT = "constant";
+
 % get the table size
 [nRows, nColumns] = size(T);
 
@@ -47,9 +53,6 @@ columnNames2Classes = table(columnNames, classes)
 % Note that ocean_proximity does not have the class "double", which is
 % MATLAB's numerical type.  This means that it is categorical data. 
 % Let's filter out the cells that do not have categorical data.
-
-% store double in a variable to force syntax errors if misspelled
-DOUBLE = "double";
 
 % loop through non-numerical data columns:
 % * *classes* is an array (or matrix) of strings
@@ -88,7 +91,32 @@ columnNames2Classes = table(columnNames, classes)
 %%
 % 1. Fill in missing values.  We will be using means for simplity.
 
-%
+% convert table to a matrix
+Tarr = table2array(T);
+
+% check for any missing values:
+% * we do this by first checking for each NaN (not a number)
+% * then we sum up each column
+% * any nonzero column is missing values
+nMissingPerColumn = sum(isnan(Tarr))';
+% display as a table
+columnNames2nMissing = table(columnNames, nMissingPerColumn)
+
+%%
+% We see that the number of bedrooms is missing 207 entries.
+
+% get the means of each column ignoring missing data.
+Tmeans = mean(Tarr, OMITNAN);
+% fill the missing data with the calculated means
+Tarr = fillmissing(Tarr, 'constant', Tmeans);
+
+%%
+% There should now be no missing data.
+
+% check for any missing values
+nMissingPerColumn = sum(isnan(Tarr))';
+% display as a table
+columnNames2nMissing = table(columnNames, nMissingPerColumn)
 
 %% Appendix
 
