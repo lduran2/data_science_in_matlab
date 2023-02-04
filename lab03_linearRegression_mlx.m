@@ -107,10 +107,10 @@ Tarr = table2array(T);
 % * then we sum up each column
 % * any nonzero column is missing values
 nMissingPerColumn = sum(isnan(Tarr))';
-% display as a table
-columnNames2nMissing = table(columnNames, nMissingPerColumn)
 % backup the classes
 nMissingPerColumnBefore = nMissingPerColumn;
+% display as a table
+columnNames2nMissing = table(columnNames, nMissingPerColumn)
 
 %%
 % We see that the number of bedrooms is missing 207 entries.
