@@ -19,7 +19,9 @@
 clear;
 % load the housing data into table T
 T = readtable('housing.csv');
-% display the column names
+% display the column names:
+% the apostrophe oprator returns the transverse of a matrix, that is,
+% rows become columns and columns become rows
 columnNames = T.Properties.VariableNames';
 disp(columnNames)
 
