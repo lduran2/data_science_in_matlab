@@ -36,6 +36,7 @@ disp(columnNames)
 % store string constants in variables to force syntax errors
 % if misspelled
 DOUBLE = "double";
+ALL = "all";
 OMITNAN = "omitnan";
 CONSTANT = "constant";
 
@@ -91,6 +92,9 @@ end % next iCat
 classesAfter = tableColumnClasses(T, nColumns);
 % make a table of data types to class
 columnNames2Classes = table(columnNames, classesBefore, classesAfter)
+% assert all double
+assert(sum(classesAfter==DOUBLE, ALL), ...
+    'Unable to encode all categorical data as numerical data.')
 
 %%
 % 1. Fill in missing values.  We will be using means for simplity.
@@ -123,6 +127,9 @@ Tarr = fillmissing(Tarr, 'constant', Tmeans);
 nMissingPerColumnAfter = sum(isnan(Tarr))';
 % display as a table
 columnNames2nMissing = table(columnNames, nMissingPerColumnBefore, nMissingPerColumnAfter)
+% assert no missing data
+assert(sum(nMissingPerColumnAfter, ALL)==0, ...
+    'Unable to fill all missing data.')
 
 %% Appendix
 
